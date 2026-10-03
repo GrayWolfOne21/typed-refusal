@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "typed-refusal"
+version = "0.1.0"
+description = "Fail-closed typed refusal contract. Accept only when required fields are present and sourced."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "GrayWolfOne21" }]
+keywords = ["fail-closed", "refusal", "evidence", "gate"]
+
+[project.urls]
+Homepage = "https://github.com/GrayWolfOne21/typed-refusal"
+
+[tool.setuptools.packages.find]
+where = ["src"]
