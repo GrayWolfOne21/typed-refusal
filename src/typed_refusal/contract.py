@@ -62,6 +62,7 @@ class Decision:
     not_ready: tuple[str, ...]
     data_null: tuple[str, ...]
     reasons: tuple[str, ...]
+    sources: tuple[Source, ...] = ()
 
     @property
     def ok(self) -> bool:

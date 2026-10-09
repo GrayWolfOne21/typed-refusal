@@ -36,7 +36,8 @@ def evaluate(
     """
 
     body = dict(payload or {})
-    by_field = _index_sources(sources or ())
+    chain = tuple(sources or ())
+    by_field = _index_sources(chain)
     not_ready: list[str] = []
     data_null: list[str] = []
     reasons: list[str] = []
@@ -80,11 +81,12 @@ def evaluate(
         not_ready=tuple(not_ready),
         data_null=tuple(data_null),
         reasons=tuple(reasons),
+        sources=chain,
     )
 
 
 def seal(decision: Decision) -> str:
-    """SHA-256 of the canonical decision. Refusal is a receipt, not a log line."""
+    """SHA-256 of the committed decision. Refusal is a refusal, not a log line."""
 
     payload = {
         "status": decision.status,
@@ -93,6 +95,15 @@ def seal(decision: Decision) -> str:
         "not_ready": list(decision.not_ready),
         "data_null": list(decision.data_null),
         "reasons": list(decision.reasons),
+        "sources": [
+            {
+                "field": source.field,
+                "source_id": source.source_id,
+                "locator": source.locator,
+                "digest": source.digest,
+            }
+            for source in decision.sources
+        ],
     }
     encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()
     return hashlib.sha256(encoded).hexdigest()

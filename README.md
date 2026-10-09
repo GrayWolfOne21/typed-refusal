@@ -40,7 +40,7 @@ A missing key is `NOT_READY`. A present null, blank, or placeholder is `DATA_NUL
 
 ## Seal
 
-`seal()` hashes the decision: status, contract name, accepted values, the two refusal lists, and reasons. It does not hash a document digest or a page locator. Moving a locator to another page does not change the seal. That gap was reported by Marius Andronie. It is not closed in this tree. See [CHANGELOG.md](CHANGELOG.md).
+`seal()` hashes the decision and the source chain passed to `evaluate`: field, source id, locator, and digest. A locator or digest change changes the seal. The gate does not fetch the artifact. An empty locator still seals as empty.
 
 ## What this is not
 

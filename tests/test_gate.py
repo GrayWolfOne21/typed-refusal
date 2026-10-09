@@ -83,6 +83,26 @@ class GateTests(unittest.TestCase):
         self.assertEqual(seal(decision), seal(decision))
         self.assertEqual(len(seal(decision)), 64)
 
+    def test_seal_changes_when_locator_or_digest_moves(self):
+        payload = {"subject": "invoice-9", "amount": 40, "note": "ok"}
+        first = evaluate(
+            CLAIM,
+            payload,
+            [Source("subject", "doc-1", "Page 14"), Source("amount", "doc-1", "Page 14", digest="abc")],
+        )
+        moved = evaluate(
+            CLAIM,
+            payload,
+            [Source("subject", "doc-1", "Page 2"), Source("amount", "doc-1", "Page 14", digest="abc")],
+        )
+        redigest = evaluate(
+            CLAIM,
+            payload,
+            [Source("subject", "doc-1", "Page 14"), Source("amount", "doc-1", "Page 14", digest="def")],
+        )
+        self.assertNotEqual(seal(first), seal(moved))
+        self.assertNotEqual(seal(first), seal(redigest))
+
 
 if __name__ == "__main__":
     unittest.main()
