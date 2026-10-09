@@ -36,6 +36,12 @@ decision.accepted    # {}
 
 `DATA_NULL` wins when both fire. A null is a stronger statement than a missing source.
 
+A missing key is `NOT_READY`. A present null, blank, or placeholder is `DATA_NULL`. Those are not interchangeable.
+
+## Seal
+
+`seal()` hashes the decision: status, contract name, accepted values, the two refusal lists, and reasons. It does not hash a document digest or a page locator. Moving a locator to another page does not change the seal. That gap was reported by Marius Andronie. It is not closed in this tree. See [CHANGELOG.md](CHANGELOG.md).
+
 ## What this is not
 
 This is a reference implementation of a gate, not a claim that fail-closed refusal is new. Related public work already treats stop as a first-class result and returns the missing set on reject.
@@ -44,12 +50,22 @@ No domain rules ship here. See [PUBLIC_BOUNDARY.md](PUBLIC_BOUNDARY.md).
 
 ## Run
 
+The package lives under `src/`. A fresh clone needs that path, or an editable install.
+
 ```bash
+PYTHONPATH=src python -m unittest discover -s tests
+PYTHONPATH=src python examples/minimal.py
+```
+
+Or:
+
+```bash
+pip install -e .
 python -m unittest discover -s tests
 python examples/minimal.py
 ```
 
-Requires Python 3.10+. No third-party dependencies.
+Requires Python 3.10+. No third-party dependencies to run the tests. `pip install -e .` needs setuptools.
 
 ## License
 
